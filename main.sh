@@ -1,183 +1,212 @@
 #!/bin/bash
 
-# 🌈 FEMBOY SQUID GAMES 3 — Degenerate Bash Edition 🌈
+score=0
+mood=0
 
-trap "tput cnorm; stty echo; clear; exit" INT
-stty -echo
-tput civis
-clear
+# === ROUND 1: GAY LIGHT / SEX LIGHT ===
+round1() {
+  clear
+  echo "====================================="
+  echo "     ROUND 1: GAY LIGHT / SEX LIGHT"
+  echo "-------------------------------------"
+  echo "Move ONLY when it's GREEN (GAY LIGHT)"
+  echo "If it's SEX LIGHT, don't move or... you get virtually wrecked."
+  echo
+  position=0
 
-# Terminal dimensions & positions
-cols=$(tput cols)
-rows=$(tput lines)
-player_x=5
-player_y=$((rows / 2))
-goal_x=$((player_x + 25))  # short distance
-
-# Utility: read one key with timeout
-function wait_keypress() {
-    read -rsn1 -t "$1" key
-}
-
-### GAME 1: RED LIGHT, GREEN LIGHT ###
-function draw_redlight() {
+  while [ $position -lt 5 ]; do
+    light=$((RANDOM % 2))
     clear
-    tput cup 1 2; echo "✨ GAME 1: RED LIGHT, GREEN LIGHT ✨"
-    tput cup 3 2; printf 'Runway: '
-    for ((i=0; i<cols-6; i++)); do
-        if (( i == player_x )); then printf '💃'
-        elif (( i == goal_x )); then printf '🎯'
-        else printf '—'; fi
-    done
+    echo "Your current position: $position"
     echo
-    tput cup $((rows-3)) 2; echo "Use ← → or A/D to move"
-    tput cup $((rows-2)) 2; echo "Green lasts 5s. Don't move on RED!"
-}
-
-function game_redlight() {
-    while (( player_x < goal_x )); do
-        draw_redlight
-        # GREEN LIGHT 5s
-        tput cup 5 2; echo "🟢 GREEN LIGHT — MOVE! (5s)"
-        end=$((SECONDS + 5))
-        while [ $SECONDS -lt $end ]; do
-            wait_keypress 0.5
-            case "$key" in
-                D|d|$'\x1b[C') ((player_x++));;
-                A|a|$'\x1b[D') ((player_x--));;
-            esac
-            (( player_x >= goal_x )) && return 0
-            draw_redlight
-        done
-        # RED LIGHT 3s
-        draw_redlight
-        tput cup 5 2; echo "🔴 RED LIGHT — FREEZE! (3s)"
-        end=$((SECONDS + 3))
-        while [ $SECONDS -lt $end ]; do
-            wait_keypress 0.2
-            if [[ -n "$key" ]]; then
-                clear
-                echo -e "💀 You moved on RED LIGHT. Eliminated.\n"
-                sleep 2
-                tput cnorm; stty echo; clear; exit 1
-            fi
-        done
-    done
-    clear
-    echo "🏆 You survived Game 1. Gender ✔ Thriving ✔"
-    sleep 2
-}
-
-### GAME 2: ASS‑EATING CONTEST ###
-function game_ass_eating() {
-    clear
-    echo "🍑 GAME 2: ASS‑EATING CONTEST 🍑"
-    echo "Mash [A] & [S] like your life depends on it."
-    echo
-    bar=""
-    score=0
-    target=25
-    end=$((SECONDS + 7))
-    printf "Progress: [%*s]\n" $target ""
-    while [ $SECONDS -lt $end ] && (( score < target )); do
-        wait_keypress 0.1
-        if [[ "$key" =~ [aAsS] ]]; then
-            ((score++))
-            bar+="🥵"
-        fi
-        printf "\rProgress: [%s%-*s]" "$bar" $((target - ${#bar})) ""
-    done
-    echo
-    if (( score < target )); then
-        clear
-        echo "💀 You lacked stamina. Contest lost."
-        sleep 2
-        tput cnorm; stty echo; clear; exit 1
+    if [ $light -eq 0 ]; then
+      echo "SEX LIGHT!!! Don't move!!"
     else
-        echo "💦 You dominated. You win."
-        sleep 2
+      echo "GAY LIGHT! Move now!"
     fi
-}
+    echo
+    read -n1 -p "[M]ove or [W]ait: " action
+    echo
 
-### GAME 3: SUCKING DICK CONTEST ###
-function game_suck_dick() {
-    clear
-    echo "🍆 GAME 3: SUCKING DICK CONTEST 🍆"
-    echo "Rapidly press [D] & [K] to prove your dedication."
-    echo
-    bar=""
-    score=0
-    target=30
-    end=$((SECONDS + 8))
-    printf "Suck Meter: [%*s]\n" $target ""
-    while [ $SECONDS -lt $end ] && (( score < target )); do
-        wait_keypress 0.1
-        if [[ "$key" =~ [dDkK] ]]; then
-            ((score++))
-            bar+="💦"
-        fi
-        printf "\rSuck Meter: [%s%-*s]" "$bar" $((target - ${#bar})) ""
-    done
-    echo
-    if (( score < target )); then
-        clear
-        echo "💀 You didn’t go deep enough. Contest lost."
+    if [[ $action == "M" || $action == "m" ]]; then
+      if [ $light -eq 0 ]; then
+        echo "Oh no! You moved on SEX LIGHT!"
+        echo "You were virtually taken by surprise..."
+        ((mood++))
         sleep 2
-        tput cnorm; stty echo; clear; exit 1
+      else
+        ((position++))
+      fi
     else
-        echo "💦 You gave a stellar performance. You win."
-        sleep 2
+      echo "You wait patiently."
+      sleep 1
     fi
+  done
+  round2_twerkoff
 }
 
-### FINAL ROUND: ULTRA‑REALISTIC SEX ###
-function sex_round() {
-    clear
-    echo "🍒 FINAL ROUND: ULTRA-REALISTIC SEX 🍒"
-    echo
-    sleep 1
-    echo "Felix: “Foreplay length?”"
-    PS3="Choose foreplay (1–3): "
-    select fp in "5 min awkward kisses" "15 min steamy build-up" "30 min full seduction"; do
-        case $REPLY in
-            1) echo "💋 Quick pecks, nervous giggles." ;;
-            2) echo "💋 Breathy moans, gentle teasing." ;;
-            3) echo "💋 Long massage, playful exploration." ;;
-            *) echo "Pick 1–3." && continue ;;
-        esac; break
-    done; sleep 1
+# === ROUND 2: FEMBOY TWERK-OFF ===
+round2_twerkoff() {
+  clear
+  echo "====================================="
+  echo "        ROUND 2: FEMBOY TWERK-OFF"
+  echo "-------------------------------------"
+  echo "Mash T to twerk on beat! You have 10 seconds."
+  twerks=0
+  end=$((SECONDS + 10))
 
-    echo; echo "Felix: “Position?”"
-    PS3="Choose position (1–3): "
-    select pos in "Missionary" "Spooning" "Doggy style"; do
-        case $REPLY in
-            1) echo "🔥 Intimate eye-contact thrusts." ;;
-            2) echo "🔥 Soft alignment, shared warmth." ;;
-            3) echo "🔥 Wild, vulnerable energy." ;;
-            *) echo "Pick 1–3." && continue ;;
-        esac; break
-    done; sleep 1
+  while [ $SECONDS -lt $end ]; do
+    read -n1 -t 1 input
+    if [[ $input == "T" || $input == "t" ]]; then
+      ((twerks++))
+    fi
+  done
 
-    echo; echo "Felix: “Aftercare?”"
-    PS3="Choose aftercare (1–3): "
-    select ac in "Cuddle & reassure" "Silent hug" "Text memes later"; do
-        case $REPLY in
-            1) echo "🛋️ You whisper sweet nothings." ;;
-            2) echo "🛋️ Warm embrace, quiet smiles." ;;
-            3) echo "📱 Hours later, comedic relief." ;;
-            *) echo "Pick 1–3." && continue ;;
-        esac; break
-    done
-    echo; echo "🖤 Emotional baggage: +1"; sleep 2
+  clear
+  echo "==== TWERK-OFF COMPLETE ===="
+  echo "You achieved $twerks twerks."
+  if [ $twerks -ge 10 ]; then
+    echo "YASSS. Dumptruck status."
+    ((score+=2))
+  elif [ $twerks -ge 5 ]; then
+    echo "Decent bounce."
+    ((score+=1))
+  else
+    echo "Flat as Ubuntu default wallpaper."
+    ((score--))
+  fi
+  sleep 3
+  sex_night
 }
 
-### RUN THEM ALL ###
-game_redlight
-game_ass_eating
-game_suck_dick
-sex_round
+# === SEX NIGHT - PG-18 VIRTUAL HOOKUPS ===
+sex_night() {
+  clear
+  ((mood++))
+  echo "===================================="
+  echo "             SEX NIGHT"
+  echo "------------------------------------"
+  echo "The dorm lights dim. Moans echo in the distance."
+  echo "Choose your partner for the night:"
+  echo "1) Aiden - Leather harness, dominant energy"
+  echo "2) Luca  - Gamer brat, cheeky and fast"
+  echo "3) Kieran - Silent menace, soft touch"
+  echo "4) Jules - Chaos in fishnets"
+  read -p "Choose (1-4): " pick
 
-clear
-echo "🏳️‍⚧️ FEMBOY SQUID GAMES COMPLETE 🏳️‍⚧️"
-echo "✨ You are now: messy, horny, and very genderful."
-tput cnorm; stty echo
+  case $pick in
+    1) sex_aiden ;;
+    2) sex_luca ;;
+    3) sex_kieran ;;
+    4) sex_jules ;;
+    *) echo "Invalid."; sleep 2; sex_night ;;
+  esac
+}
+
+sex_aiden() {
+  clear
+  echo "Aiden growls: 'No safe words tonight.'"
+  echo "You wake up bruised, satisfied, and 10%% more gay."
+  ((score+=2)); ((mood+=2)); sleep 3; round3_intro
+}
+
+sex_luca() {
+  clear
+  echo "Luca smirks: 'Loser gets topped.'"
+  echo "You lose. He doesn't."
+  ((score++)); ((mood++)); sleep 3; round3_intro
+}
+
+sex_kieran() {
+  clear
+  echo "Kieran is quiet... but intense."
+  echo "The room smells like cologne and betrayal."
+  ((score+=2)); ((mood+=3)); sleep 3; round3_intro
+}
+
+sex_jules() {
+  clear
+  echo "Jules throws glitter and chaos."
+  echo "You wake up in a rave pit with bite marks."
+  ((score+=3)); ((mood+=2)); sleep 3; round3_intro
+}
+
+# === FINAL ROUND ===
+round3_intro() {
+  clear
+  ((mood++))
+  echo "====================================="
+  echo "           FINAL ROUND"
+  echo "         BETRAYAL OR SLAYAL"
+  echo "====================================="
+  echo "The femboys surround you on the rooftop."
+  echo "What do you do?"
+  echo "S) Seduce them all"
+  echo "A) Ally with one"
+  echo "B) Betray all"
+  read -n1 -p "Choose: " final_choice
+  echo
+
+  case $final_choice in
+    [Ss]) seduce ;;
+    [Aa]) ally ;;
+    [Bb]) betray ;;
+    *) round3_intro ;;
+  esac
+}
+
+seduce() {
+  clear
+  echo "You unzip your hoodie slowly."
+  echo "'There's enough of me for all of you,' you whisper."
+  if [ $mood -ge 3 ]; then
+    echo "They drop their weapons... and their guard."
+    echo "Ending: Femboy Harem"
+    ((score+=3))
+  else
+    echo "They laugh. 'You're not that hot.'"
+    echo "Ending: Tried Too Hard"
+  fi
+  game_over
+}
+
+ally() {
+  clear
+  echo "You reach for Kieran's hand."
+  if [ $score -ge 5 ]; then
+    echo "He smirks. 'Let's get out of here.'"
+    echo "Ending: Femboy Fugitive Lovers"
+    ((score+=2))
+  else
+    echo "He throws you off the roof."
+    echo "Ending: Not Him"
+  fi
+  game_over
+}
+
+betray() {
+  clear
+  echo "You press the red button hidden in your heel."
+  echo "Glitter gas floods the rooftop."
+  if [ $score -ge 4 ]; then
+    echo "You survive alone."
+    echo "Ending: Ruthless Power Twink"
+    ((score+=3))
+  else
+    echo "You die choking on your own ego."
+    echo "Ending: Self-Sabotage"
+  fi
+  game_over
+}
+
+game_over() {
+  echo
+  echo "========================"
+  echo "      GAME OVER"
+  echo "Score: $score   Mood: $mood"
+  echo "========================"
+  exit 0
+}
+
+# Start game
+round1
