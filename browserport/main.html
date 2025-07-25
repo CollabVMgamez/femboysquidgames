@@ -1,0 +1,242 @@
+<html>
+<head>
+<title>Femboy Squid Games</title>
+<script>document.addEventListener("DOMContentLoaded",async ()=>{
+const game = document.body.querySelector("div")
+const cols = 40
+const rows = 15
+let player_x = 5
+const goal_x = player_x + 25
+let posX = 0
+let posY = 0
+for (let i = 0; i < rows; i++) {
+	const s = document.createElement("span")
+	s.innerText = " ".repeat(cols)
+	game.appendChild(document.createElement("span"))
+}
+
+let key = null
+function wait_keypress(t) {
+	return new Promise(approve => {
+		document.onkeydown = e => { key = e.key.toLowerCase(); approve() }
+		if (t) setTimeout(() => { document.onkeypress = null; key = null; approve() }, t*1e3)
+	})
+}
+
+function clearLine(i) {
+	game.children[i].innerText = " ".repeat(cols)
+}
+
+function clear() {
+	for (let i = 0; i < rows; i++) {
+		clearLine(i)
+	}
+	posX = 0
+	posY = 0
+}
+
+function tput_cup(y, x) {
+	posX = x
+	posY = y
+}
+
+function echo(text="", noNewLine) {
+	if (posY >= rows) {
+		for (let i = 0; i < (rows - 1); i++) {
+			game.children[i].innerText = game.children[i + 1].innerText
+		}
+		clearLine(rows - 1)
+		posY = rows - 1
+	}
+	const s = game.children[posY]
+	let t = s.innerText.split("")
+	for (let i = 0; i < text.length; i++) {
+		t[posX + i] = text[i]
+	}
+	s.innerText = t.join("")
+	if (!noNewLine) {posY += 1;posX = 0}
+	else { posX += text.length }
+}
+
+function printf(text) {
+	echo(text, true)
+}
+
+function printf_r(text) {
+	const s = game.children[posY]
+	s.innerText = ""
+	echo(text, true)
+}
+
+function draw_redlight() {
+	clear()
+	tput_cup(1, 2); echo("✨ GAME 1: RED LIGHT, GREEN LIGHT ✨")
+	tput_cup(3, 2); echo("Runway: ")
+	for (let i = 0; i < cols - 6; i++) {
+		if (i === player_x) { printf("💃") }
+		else if (i === goal_x) { printf("🎯") }
+		else { printf("—") }
+	}
+	tput_cup(rows - 3, 2); echo("Use ← → or A/D to move")
+	tput_cup(rows - 2, 2); echo("Green lasts 5s. Don't move on RED!")
+}
+
+function sleep(ms) {
+	return new Promise(a=>setTimeout(a,ms*1e3))
+}
+
+function exit() { location.reload() }
+
+function game_redlight() {
+	return new Promise(async approve => {
+		let r = true;
+		while (r) {
+			draw_redlight()
+			tput_cup(5, 2); echo("🟢 GREEN LIGHT — MOVE! (5s)")
+			var end = Date.now() + 5e3
+			while (Date.now() < end) {
+				await wait_keypress(0.5)
+				if (!key) continue;
+				if (key === "a") player_x--
+				if (key === "d") player_x++
+				if (player_x >= goal_x) { r = false; break }
+				draw_redlight()
+			}
+			if (!r) break;
+			draw_redlight()
+			tput_cup(5, 2); echo("🔴 RED LIGHT — FREEZE! (3s)")
+			var end = Date.now() + 3e3
+			while (Date.now() < end) {
+				await wait_keypress(0.5)
+				if (key) {
+					clear()
+					echo("💀 You moved on RED LIGHT. Eliminated.")
+					await sleep(2)
+					exit()
+				}
+			}
+		}
+		clear()
+		echo("🏆 You survived Game 1. Gender ✔ Thriving ✔")
+		await sleep(2)
+		approve()
+	})
+}
+
+function game_ass_eating() {
+	return new Promise(async approve => {
+	clear()
+	tput_cup(1, 2); echo("🍑 GAME 2: ASS‑EATING CONTEST 🍑")
+	tput_cup(2, 2); echo("Mash [A] & [S] like your life depends on it.")
+	let bar=""
+	let score=0
+	const target=25
+	let end = Date.now() + 7e3
+	while (Date.now() < end && score < target) {
+		await wait_keypress(0.1)
+		if (key === "a" || key === "s") {
+			score++
+			bar+="🥵"
+		}
+		printf_r("Progress: [" + bar.padEnd(target, "#") + "]")
+	}
+	if (score < target) {
+		clear()
+		echo("💀 You lacked stamina. Contest lost.")
+		await sleep(2)
+		exit()
+	} else {
+		echo("💦 You dominated. You win.")
+		await sleep(2)
+		approve()
+	}
+	})
+}
+
+function game_suck_dick() {
+	return new Promise(async approve => {
+	clear()
+	tput_cup(1, 2); echo("🍆 GAME 3: SUCKING DICK CONTEST 🍆")
+	tput_cup(2, 2); echo("Rapidly press [D] & [K] to prove your dedication.")
+	let bar=""
+	let score=0
+	const target=30
+	let end = Date.now() + 8e3
+	while (Date.now() < end && score < target) {
+		await wait_keypress(0.1)
+		if (key === "d" || key === "k") {
+			score++
+			bar+="💦"
+		}
+		printf_r("Suck Meter: [" + bar.padEnd(target, "#") + "]")
+	}
+	if (score < target) {
+		clear()
+		echo("💀 You didn’t go deep enough. Contest lost.")
+		await sleep(2)
+		exit()
+	} else {
+		echo("💦 You gave a stellar performance. You win.")
+		await sleep(2)
+		approve()
+	}
+	})
+}
+
+let reply = null
+function makeChoice(text, choices) {
+	echo(text)
+	for (let i = 0; i < choices.length; i++) { echo((i + 1) + ") " + choices[i]) }
+	return new Promise(async approve => {
+		while (true) {
+			await wait_keypress()
+			const res = +key
+			if (res >= 1 && res <= 3) { reply = res; approve(); break } else { echo("Pick 1-3.") }
+		}
+	})
+}
+
+function sex_round() {
+	return new Promise(async approve => {
+	clear()
+	echo("🍒 FINAL ROUND: ULTRA-REALISTIC SEX 🍒")
+	echo()
+	await sleep(1)
+	echo("Felix: “Foreplay length?”")
+	await makeChoice("Choose foreplay (1–3):", ["5 min awkward kisses", "15 min steamy build-up", "30 min full seduction"])
+	if (reply === 1) echo("💋 Quick pecks, nervous giggles.")
+	if (reply === 2) echo("💋 Breathy moans, gentle teasing.")
+	if (reply === 3) echo("💋 Long massage, playful exploration.")
+	await sleep(1)
+	echo(); echo("Felix: “Position?”")
+	await makeChoice("Choose position (1–3):", ["Missionary", "Spooning", "Doggy style"])
+	if (reply === 1) echo("🔥 Intimate eye-contact thrusts.")
+	if (reply === 2) echo("🔥 Soft alignment, shared warmth.")
+	if (reply === 3) echo("🔥 Wild, vulnerable energy.")
+	await sleep(1)
+	echo(); echo("Felix: “Aftercare?”")
+	await makeChoice("Choose aftercare (1–3): ", ["Cuddle & reassure", "Silent hug", "Text memes later"])
+	if (reply === 1) echo("🛋️ You whisper sweet nothings.")
+	if (reply === 2) echo("🛋️ Warm embrace, quiet smiles.")
+	if (reply === 3) echo("📱 Hours later, comedic relief.")
+	echo(); echo("🖤 Emotional baggage: +1"); await sleep(2)
+	approve()
+	})
+}
+
+
+await game_redlight()
+await game_ass_eating()
+await game_suck_dick()
+await sex_round()
+
+clear()
+echo("🏳️‍⚧️ FEMBOY SQUID GAMES COMPLETE 🏳️‍⚧️")
+echo("✨ You are now: messy, horny, and very genderful.")
+
+})</script>
+</head>
+<body>
+<div style="display:flex;font-family:monospace;flex-direction:column"></div>
+</body>
+</html>
