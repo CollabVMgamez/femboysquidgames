@@ -1,5 +1,5 @@
 # femboysquidgames
-Knock off of Squid games execpt SEX and HORNY (made in collabvm) WIndows port may be stable or not. Emoji rendering isn't currently working so... ignore some random characters
+Knock off of Squid games execpt SEX and HORNY (made in collabvm) WIndows port may be stable or not. Emoji rendering isn't currently working so... ignore some random characters, btw this is just ai
 
 actual description: **Femboy Squid Games: A Thrilling Twist of Desire and Danger**
 
