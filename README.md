@@ -1,5 +1,5 @@
 # femboysquidgames
-Knock off of Squid games execpt SEX and HORNY (made in collabvm)
+Knock off of Squid games execpt SEX and HORNY (made in collabvm) WIndows port may be unstable idfk
 
 actual description: **Femboy Squid Games: A Thrilling Twist of Desire and Danger**
 
