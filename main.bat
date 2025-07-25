@@ -1,32 +1,26 @@
 @echo off
 setlocal EnableDelayedExpansion
 
-:: 🌈 FEMBOY SQUID GAMES 3 — Windows Batch Edition (Simplified) 🌈
+:: FEMBOY SQUID GAMES - SAFE ASCII VERSION
 
-:: ----------------------------------------
-:: GAME 1: STRUT OR DIE (5 Steps)
-:: ----------------------------------------
+:: ROUND 1 - STRUT OR DIE
 for /L %%i in (1,1,5) do (
   cls
-  echo ✨ GAME 1: STRUT OR DIE (Step %%i of 5) ✨
-  echo Press A within 2 seconds to strut forward!
+  echo GAME 1 - STEP %%i OF 5
+  echo Press A within 2 seconds to strut forward
   choice /n /c A /t 2 /d N >nul
   if errorlevel 2 (
-    echo.
-    echo 💀 You hesitated. Eliminated.
+    echo You hesitated. Eliminated.
     timeout /t 2 >nul
-    goto :cleanup
+    goto :eof
   )
 )
-echo.
-echo 🏆 You survived Game 1!
+echo You survived Round 1!
 timeout /t 2 >nul
 
-:: ----------------------------------------
-:: GAME 2: ASS‑EATING CONTEST
-:: ----------------------------------------
+:: ROUND 2 - ASS EATING
 cls
-echo 🍑 GAME 2: ASS‑EATING CONTEST 🍑
+echo GAME 2 - ASS EATING CONTEST
 echo Mash A or S rapidly for 7 seconds!
 set /a score=0
 for /L %%t in (1,1,7) do (
@@ -38,19 +32,17 @@ for /L %%t in (1,1,7) do (
 cls
 echo Score: %score% out of 25
 if %score% lss 25 (
-  echo 💀 Not enough stamina. You lose.
+  echo Not enough stamina. You lose.
   timeout /t 2 >nul
-  goto :cleanup
+  goto :eof
 ) else (
-  echo 💦 You dominated! You win Game 2.
+  echo You dominated. You win Round 2.
   timeout /t 2 >nul
 )
 
-:: ----------------------------------------
-:: GAME 3: SUCKING DICK CONTEST
-:: ----------------------------------------
+:: ROUND 3 - SUCKING
 cls
-echo 🍆 GAME 3: SUCKING DICK CONTEST 🍆
+echo GAME 3 - SUCKING D CONTEST
 echo Mash D or K rapidly for 8 seconds!
 set /a score=0
 for /L %%t in (1,1,8) do (
@@ -62,74 +54,17 @@ for /L %%t in (1,1,8) do (
 cls
 echo Score: %score% out of 30
 if %score% lss 30 (
-  echo 💀 You didn't go deep enough. You lose.
+  echo You didn't go deep enough. You lose.
   timeout /t 2 >nul
-  goto :cleanup
+  goto :eof
 ) else (
-  echo 💦 Stellar performance! You win Game 3.
+  echo Solid work. You win Round 3.
   timeout /t 2 >nul
 )
 
-:: ----------------------------------------
-:: FINAL ROUND: ULTRA‑REALISTIC SEX
-:: ----------------------------------------
-:sex_round
+:: ENDING
 cls
-echo 🍒 FINAL ROUND: ULTRA‑REALISTIC SEX 🍒
-echo.
-
-:: Foreplay
-echo 1) 5 min awkward kisses
-echo 2) 15 min steamy build-up
-echo 3) 30 min full seduction
-choice /n /c 123 /p "Choose foreplay (1-3): " >nul
-if errorlevel 3 (
-  echo 💋 Long massage & playful exploration.
-) else if errorlevel 2 (
-  echo 💋 Breathy moans & gentle teasing.
-) else (
-  echo 💋 Quick pecks & nervous giggles.
-)
-timeout /t 1 >nul
-echo.
-
-:: Position
-echo 1) Missionary
-echo 2) Spooning
-echo 3) Doggy style
-choice /n /c 123 /p "Choose position (1-3): " >nul
-if errorlevel 3 (
-  echo 🔥 Wild, vulnerable energy.
-) else if errorlevel 2 (
-  echo 🔥 Soft alignment & shared warmth.
-) else (
-  echo 🔥 Intimate eye-contact thrusts.
-)
-timeout /t 1 >nul
-echo.
-
-:: Aftercare
-echo 1) Cuddle & reassure
-echo 2) Silent hug
-echo 3) Text memes later
-choice /n /c 123 /p "Choose aftercare (1-3): " >nul
-if errorlevel 3 (
-  echo 📱 Hours later, comedic relief.
-) else if errorlevel 2 (
-  echo 🛋️ Warm embrace & quiet smiles.
-) else (
-  echo 🛋️ Whisper sweet nothings.
-)
-timeout /t 2 >nul
-
-:: ----------------------------------------
-:: YOU WIN
-:: ----------------------------------------
-cls
-echo 🏳️‍⚧️ FEMBOY SQUID GAMES COMPLETE 🏳️‍⚧️
-echo ✨ You are now: messy, horny, and very genderful.
-timeout /t 3 >nul
-
-:cleanup
-endlocal
+echo ALL ROUNDS COMPLETE
+echo You are now: messy, victorious, and legendary.
+pause
 exit /b
