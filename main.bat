@@ -1,70 +1,87 @@
 @echo off
+chcp 437 >nul
 setlocal EnableDelayedExpansion
 
-:: FEMBOY SQUID GAMES - SAFE ASCII VERSION
+:: GAY LIGHT SEX LIGHT GAME - CMD-SAFE
 
-:: ROUND 1 - STRUT OR DIE
-for /L %%i in (1,1,5) do (
-  cls
-  echo GAME 1 - STEP %%i OF 5
-  echo Press A within 2 seconds to strut forward
-  choice /n /c A /t 2 /d N >nul
-  if errorlevel 2 (
-    echo You hesitated. Eliminated.
-    timeout /t 2 >nul
-    goto :eof
-  )
-)
-echo You survived Round 1!
-timeout /t 2 >nul
+set score=0
+set round=1
 
-:: ROUND 2 - ASS EATING
+:round_loop
 cls
-echo GAME 2 - ASS EATING CONTEST
-echo Mash A or S rapidly for 7 seconds!
-set /a score=0
-for /L %%t in (1,1,7) do (
-  for /L %%j in (1,1,5) do (
-    choice /n /c AS /t 0 /d S >nul
-    if errorlevel 1 set /a score+=1
-  )
-)
-cls
-echo Score: %score% out of 25
-if %score% lss 25 (
-  echo Not enough stamina. You lose.
-  timeout /t 2 >nul
-  goto :eof
+echo ROUND !round! - GAY LIGHT SEX LIGHT
+echo.
+
+:: Randomly decide if it's GAY or SEX light
+set /a r=%random% %% 2
+if !r! EQU 0 (
+    set light=GAY
 ) else (
-  echo You dominated. You win Round 2.
-  timeout /t 2 >nul
+    set light=SEX
 )
 
-:: ROUND 3 - SUCKING
-cls
-echo GAME 3 - SUCKING D CONTEST
-echo Mash D or K rapidly for 8 seconds!
-set /a score=0
-for /L %%t in (1,1,8) do (
-  for /L %%j in (1,1,5) do (
-    choice /n /c DK /t 0 /d K >nul
-    if errorlevel 1 set /a score+=1
-  )
-)
-cls
-echo Score: %score% out of 30
-if %score% lss 30 (
-  echo You didn't go deep enough. You lose.
-  timeout /t 2 >nul
-  goto :eof
+echo The light is: !light!
+echo What do you do?
+echo [M] Move
+echo [W] Wait
+choice /n /c MW >nul
+if errorlevel 2 (
+    set action=WAIT
 ) else (
-  echo Solid work. You win Round 3.
-  timeout /t 2 >nul
+    set action=MOVE
 )
 
-:: ENDING
-cls
-echo ALL ROUNDS COMPLETE
-echo You are now: messy, victorious, and legendary.
+:: Evaluate outcome
+if "!light!"=="SEX" (
+    if "!action!"=="MOVE" (
+        call :sex_penalty
+        goto end_game
+    ) else (
+        echo Good choice. You waited during SEX light.
+    )
+) else (
+    if "!action!"=="MOVE" (
+        echo You moved correctly on GAY light.
+        set /a score+=1
+    ) else (
+        echo You waited unnecessarily.
+    )
+)
+
+set /a round+=1
+if !round! LEQ 5 (
+    timeout /t 3 >nul
+    goto round_loop
+)
+
+:end_game
+echo.
+echo Final Score: !score!
 pause
+exit /b
+
+:sex_penalty
+cls
+echo YOU MOVED DURING SEX LIGHT...
+echo Initiating mandatory sex scene...
+echo.
+
+:: Random sex partner
+setlocal
+set partners[0]=Twink Bouncer
+set partners[1]=Furry DJ
+set partners[2]=Buff Lube Dealer
+set partners[3]=Mysterious Otter in Latex
+set /a pick=%random% %% 4
+for /l %%i in (0,1,3) do (
+    set "name=!partners[%%i]!"
+    if %%i==!pick! (
+        set "partner=!name!"
+    )
+)
+echo You now must engage with: !partner!
+timeout /t 4 >nul
+echo That was... a lot.
+echo Game over.
+endlocal
 exit /b
