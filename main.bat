@@ -9,29 +9,9 @@ setlocal EnableDelayedExpansion
 set /a START_POS=5
 set /a GOAL_POS=30
 set /a POS=%START_POS%
-set /a TARGET1=%GOAL_POS%
 
 set /a TARGET2=25
 set /a TARGET3=30
-
-:: -- UTILITIES ------------------------------------------------
-:timeout_loop
-rem %1 = seconds, %2 = key allowed (e.g. A), %3 = violation_allowed (0/1)
-set "end=%time%"
-for /L %%i in (1,1,%1) do (
-  choice /n /c %2 /t 1 /d N >nul
-  if errorlevel 2 (
-    if "%3%"=="0" (
-      echo(
-      echo 💀 You moved on RED LIGHT. Eliminated.
-      timeout /t 2 >nul
-      goto :cleanup
-    )
-  ) else (
-    exit /b 1
-  )
-)
-exit /b 0
 
 :: -- GAME 1: RED LIGHT, GREEN LIGHT -----------------------
 :game1
@@ -40,31 +20,36 @@ echo ✨ GAME 1: RED LIGHT, GREEN LIGHT ✨
 :rl_loop
 cls
 set "bar="
-for /L %%i in (1,1,%TARGET1%) do (
-  if %%i==%POS% (set "bar=!bar!💃") else if %%i==%TARGET1% (set "bar=!bar!🎯") else set "bar=!bar!—"
+for /L %%i in (1,1,%GOAL_POS%) do (
+  if %%i==%POS% (set "bar=!bar!💃") else if %%i==%GOAL_POS% (set "bar=!bar!🎯") else (set "bar=!bar!—")
 )
 echo Runway: !bar!
 echo.
-echo Green Light — press A to move forward (%POS%/%TARGET1%)
+echo Green Light — mash A to move forward (%POS%/%GOAL_POS%)
 echo.
 
-rem GREEN LIGHT 5s: allow A, no violation
-for /L %%i in (1,1,5) do (
-  choice /n /c A /t 1 /d N >nul
+:: GREEN LIGHT: 5 seconds, each second 1-byte window
+for /L %%s in (1,1,5) do (
+  choice /n /c AN /t 1 /d N >nul
   if errorlevel 2 (
-    rem no key pressed — continue
+    rem no key pressed — stay
   ) else (
     set /a POS+=1
-    if %POS% geq %TARGET1% goto game2
+    if !POS! geq %GOAL_POS% goto game2
   )
 )
+
 echo.
 echo Red Light — DO NOT press A!
-rem RED LIGHT 3s: violation if A
-for /L %%i in (1,1,3) do (
-  choice /n /c A /t 1 /d N >nul
-  if errorlevel 1 (
-    echo.
+echo.
+
+:: RED LIGHT: 3 seconds, any press = elimination
+for /L %%s in (1,1,3) do (
+  choice /n /c AN /t 1 /d N >nul
+  if errorlevel 2 (
+    rem no key — good
+  ) else (
+    cls
     echo 💀 You moved on RED LIGHT. Eliminated.
     timeout /t 2 >nul
     goto :cleanup
@@ -78,14 +63,14 @@ cls
 echo 🍑 GAME 2: ASS‑EATING CONTEST 🍑
 echo Mash A or S rapidly for 7 seconds!
 set /a score=0
-for /L %%i in (1,1,7) do (
-  rem each second, 5 sub-intervals:
-  for /L %%j in (1,1,5) do (
-    choice /n /c AS /t 0 /d N >nul
-    if errorlevel 1 (
+for /L %%t in (1,1,7) do (
+  for /L %%i in (1,1,5) do (
+    choice /n /c AS /t 0 /d S >nul
+    if errorlevel 2 (
+      rem S or timeout — nothing
+    ) else (
       set /a score+=1
     )
-    timeout /t 0 >nul
   )
 )
 echo.
@@ -104,13 +89,14 @@ cls
 echo 🍆 GAME 3: SUCKING DICK CONTEST 🍆
 echo Mash D or K rapidly for 8 seconds!
 set /a score=0
-for /L %%i in (1,1,8) do (
-  for /L %%j in (1,1,5) do (
-    choice /n /c DK /t 0 /d N >nul
-    if errorlevel 1 (
+for /L %%t in (1,1,8) do (
+  for /L %%i in (1,1,5) do (
+    choice /n /c DK /t 0 /d K >nul
+    if errorlevel 2 (
+      rem K or timeout
+    ) else (
       set /a score+=1
     )
-    timeout /t 0 >nul
   )
 )
 echo.
@@ -126,11 +112,11 @@ if %score% lss %TARGET3% (
 :: -- FINAL ROUND: ULTRA‑REALISTIC SEX --------------------
 :sex_round
 cls
-echo 🍒 FINAL ROUND: ULTRA-REALISTIC SEX 🍒
+echo 🍒 FINAL ROUND: ULTRA‑REALISTIC SEX 🍒
 echo.
 
 :: Foreplay
-echo How long do you want foreplay?
+echo How long foreplay?
 echo 1) 5 min awkward kisses
 echo 2) 15 min steamy build-up
 echo 3) 30 min full seduction
@@ -146,7 +132,7 @@ timeout /t 1 >nul
 
 :: Position
 echo.
-echo Pick a position:
+echo Position?
 echo 1) Missionary
 echo 2) Spooning
 echo 3) Doggy style
@@ -183,6 +169,5 @@ echo ✨ You are now: messy, horny, and very genderful.
 timeout /t 3 >nul
 
 :cleanup
-tput cnorm 2>nul
 endlocal
 exit /b
