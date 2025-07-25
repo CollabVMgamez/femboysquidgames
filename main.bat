@@ -2,7 +2,7 @@
 chcp 437 >nul
 setlocal EnableDelayedExpansion
 
-:: GAY LIGHT SEX LIGHT GAME - CMD-SAFE
+:: FEMBOY SQUID GAMES: GAY LIGHT SEX LIGHT EDITION (PG-18)
 
 set score=0
 set round=1
@@ -12,7 +12,7 @@ cls
 echo ROUND !round! - GAY LIGHT SEX LIGHT
 echo.
 
-:: Randomly decide if it's GAY or SEX light
+:: Randomly choose GAY or SEX
 set /a r=%random% %% 2
 if !r! EQU 0 (
     set light=GAY
@@ -31,20 +31,19 @@ if errorlevel 2 (
     set action=MOVE
 )
 
-:: Evaluate outcome
 if "!light!"=="SEX" (
     if "!action!"=="MOVE" (
-        call :sex_penalty
-        goto end_game
+        call :femboy_encounter
+        goto continue_after_encounter
     ) else (
-        echo Good choice. You waited during SEX light.
+        echo You waited. Good instincts.
     )
 ) else (
     if "!action!"=="MOVE" (
-        echo You moved correctly on GAY light.
+        echo You moved on GAY light. Slay.
         set /a score+=1
     ) else (
-        echo You waited unnecessarily.
+        echo You hesitated on GAY. Missed opportunity.
     )
 )
 
@@ -54,34 +53,62 @@ if !round! LEQ 5 (
     goto round_loop
 )
 
+goto end_game
+
+:continue_after_encounter
+set /a round+=1
+if !round! LEQ 5 (
+    timeout /t 2 >nul
+    goto round_loop
+)
+goto end_game
+
 :end_game
-echo.
+cls
+echo GAME OVER.
 echo Final Score: !score!
 pause
 exit /b
 
-:sex_penalty
+:femboy_encounter
 cls
-echo YOU MOVED DURING SEX LIGHT...
-echo Initiating mandatory sex scene...
+echo *** SEX LIGHT ENCOUNTER ***
+echo You moved during SEX light.
+echo You must now hook up with a femboy.
 echo.
 
-:: Random sex partner
-setlocal
-set partners[0]=Twink Bouncer
-set partners[1]=Furry DJ
-set partners[2]=Buff Lube Dealer
-set partners[3]=Mysterious Otter in Latex
-set /a pick=%random% %% 4
-for /l %%i in (0,1,3) do (
-    set "name=!partners[%%i]!"
-    if %%i==!pick! (
-        set "partner=!name!"
-    )
+:choose_femboy
+echo Choose your virtual partner:
+echo [1] Aiden - the soft dom in pastel lace
+echo [2] Luca - bratty switch with a joystick kink
+echo [3] Kieran - quiet boy who goes feral in private
+echo [4] Jules - party twink with zero shame
+set /p fbchoice=Choose 1-4: 
+
+if "%fbchoice%"=="1" (
+    set "femboy=Aiden"
+    set "scene=Aiden pushes you against the wall, whispers 'You're mine now,' and takes full control of the situation."
+) else if "%fbchoice%"=="2" (
+    set "femboy=Luca"
+    set "scene=Luca challenges you to 'earn it' and makes you beg before anything happens."
+) else if "%fbchoice%"=="3" (
+    set "femboy=Kieran"
+    set "scene=Kieran acts shy until the lights are off—then bites, scratches, and moans like he’s possessed."
+) else if "%fbchoice%"=="4" (
+    set "femboy=Jules"
+    set "scene=Jules dances for you first, then pulls you into the bathroom and locks the door."
+) else (
+    echo Invalid input.
+    timeout /t 2 >nul
+    goto choose_femboy
 )
-echo You now must engage with: !partner!
-timeout /t 4 >nul
-echo That was... a lot.
-echo Game over.
-endlocal
+
+cls
+echo You chose: !femboy!
+echo.
+echo Scene:
+echo !scene!
+echo.
+echo You feel... very satisfied. That was worth the risk.
+timeout /t 5 >nul
 exit /b
