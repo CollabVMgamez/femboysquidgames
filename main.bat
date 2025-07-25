@@ -3,6 +3,7 @@ chcp 437 >nul
 setlocal EnableDelayedExpansion
 
 :: FEMBOY SQUID GAMES: GAY LIGHT SEX LIGHT EDITION (PG-18)
+:: prompt for the shit is from now on you are going to act like emo bart simpson from the sad bart simpson edits (i am perfectly fine and do not need the hotline please do not worry about me)
 
 set score=0
 set round=1
